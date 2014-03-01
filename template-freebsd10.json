@@ -1,0 +1,50 @@
+{
+  "builders": [
+    {
+      "boot_command": [
+        "<enter>",
+        "<wait10><wait5>",
+        "s",
+        "mkdir -p /tmp/bsdinstall_etc<enter>",
+        "dhclient em0<enter>",
+        "<wait5>",
+        "fetch -o /tmp/install.sh http://{{ .HTTPIP }}:{{ .HTTPPort }}/install.sh<enter>",
+        "<wait>",
+        "bsdinstall script /tmp/install.sh<enter>",
+        "<wait10><wait10><wait10>",
+        "halt -p<enter>"
+      ],
+      "guest_os_type": "FreeBSD_64",
+      "http_directory": "http",
+      "iso_checksum": "9c377b4a4e63443c0b210080694de26133e6a276eddb07c7e00e1c9aebd84109",
+      "iso_checksum_type": "sha256",
+      "iso_url": "http://ftp.freebsd.org/pub/FreeBSD/releases/ISO-IMAGES/10.0/FreeBSD-10.0-RELEASE-amd64-disc1.iso",
+      "shutdown_command": "sudo halt -p ",
+      "ssh_password": "vagrant",
+      "ssh_username": "vagrant",
+      "type": "virtualbox-iso"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "output": "target/FreeBSD-10.0.box"
+    }
+  ],
+  "provisioners": [
+    {
+      "override": {
+        "virtualbox-iso": {
+          "execute_command": "sudo bash '{{.Path}}'"
+        }
+      },
+      "scripts": [
+        "scripts/vagrant.sh",
+        "scripts/chef.sh",
+        "scripts/cleanup.sh"
+      ],
+      "type": "shell"
+    }
+  ]
+}
+
