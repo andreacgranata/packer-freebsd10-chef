@@ -34,6 +34,8 @@ pkg update
 pkg install -y sudo bash ca_root_nss virtualbox-ose-additions ruby19-gems
 pkg autoremove
 
+ln -sf /usr/local/share/certs/ca-root-nss.crt /etc/ssl/cert.pem
+
 echo 'vagrant' | pw usermod root -h 0
 echo 'vagrant' | pw useradd -n vagrant -s /usr/local/bin/bash -m -h 0 -G wheel
 echo "vagrant ALL=(ALL) NOPASSWD: ALL" >> /usr/local/etc/sudoers
